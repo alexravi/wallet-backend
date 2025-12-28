@@ -1,7 +1,4 @@
 import jwt, { SignOptions } from 'jsonwebtoken';
-import dotenv from 'dotenv';
-
-dotenv.config();
 
 const JWT_SECRET = process.env.JWT_SECRET || 'default-secret';
 const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || 'default-refresh-secret';

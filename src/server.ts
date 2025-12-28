@@ -2,6 +2,8 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import swaggerUi from 'swagger-ui-express';
+import { existsSync } from 'fs';
+import { join } from 'path';
 import { connectDatabase } from './config/database';
 import { swaggerSpec } from './config/swagger';
 import authRoutes from './routes/auth.routes';
@@ -19,7 +21,15 @@ import loanRoutes from './routes/loan.routes';
 import emiRoutes from './routes/emi.routes';
 import savingsRoutes from './routes/savings.routes';
 
-dotenv.config();
+// Only load .env file in development (when not in production and .env file exists)
+// In Azure App Service, environment variables are provided directly, so we skip dotenv
+
+const isProduction = process.env.NODE_ENV === 'production' || process.env.WEBSITE_SITE_NAME; // WEBSITE_SITE_NAME is set in Azure
+const envPath = join(process.cwd(), '.env');
+
+if (!isProduction && existsSync(envPath)) {
+  dotenv.config();
+}
 
 const app = express();
 const PORT = process.env.PORT || 5000;
